@@ -1,7 +1,7 @@
 {
     "customizations": {
       "vscode": {
-        "extensions": ["github.copilot"]
+        "extensions": ["github.copilot","reflex"]
       }
     }
   }
