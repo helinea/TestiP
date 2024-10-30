@@ -1,39 +1,53 @@
 import requests
-from reflex import Reflex
+import reflex as rfx
 
-class WeatherApp(Reflex):
-    def __init__(self, api_key):
-        self.api_key = api_key
-        self.city = ""
-        self.weather_data = None
+#class WeatherApp(rfx):
+ #  def __init__(rfx):
+        #rfx.api_key = api_key
+        #rfx.city = ""
+        #rfx.weather_data = None
 
-    def get_weather(self):
-        if not self.city:
-            return
-        url = f"http://opendata.fmi.fi/wfs"#;http://api.openweathermap.org/data/2.5/weather?q={self.city}&appid={self.api_key}&units=metric"
+
+
+def render() -> rfx.Component:       
+    return rfx.hstack(
+        rfx.text("Weather App"),
+        rfx.button("Get Weather", on_click=get_weather()),
+        rfx.text(weather_data),
+            #rfx.text(f"City: {rfx.weather_data['name']}")
+            #rfx.text(f"Temperature: {weather_data['main']['temp']}°C")
+            #rfx.text(f"Weather: {weather_data['weather'][0]['description']}")
+        #rfx.input("Enter city name", on_change=set_city)
+        )
+
+def get_weather():        
+        url = f"http://opendata.fmi.fi/wfs"#;http://api.openweathermap.org/data/2.5/weather?q={rfx.city}&appid={rfx.api_key}&units=metric"
         response = requests.get(url)
+        global weather_data 
+        weather_data = None
+        
         if response.status_code == 200:
-            self.weather_data = response.json()
+            weather_data = response.json()
         else:
-            self.weather_data = None
-
-
-    def render(self):
-        self.clear()
-        self.text("Weather Application")
-        self.input("Enter city name", on_change=self.set_city)
-        self.button("Get Weather", on_click=self.get_weather)
-        if self.weather_data:
-            self.text(f"City: {self.weather_data['name']}")
-            self.text(f"Temperature: {self.weather_data['main']['temp']}°C")
-            self.text(f"Weather: {self.weather_data['weather'][0]['description']}")
-        else:
-            self.text("No weather data available")
-
-    def set_city(self, city):
-        self.city = city
-
+            weather_data = "Eipä mittään"
+        
+#def set_city(rfx):
+        #rfx.city = city
+def index() -> rfx.Component:
+    return rfx.container(
+        rfx.box(
+            "What is Reflex?",
+            # The user's question is on the right.
+            text_align="right",
+        ),
+        rfx.box(
+            "A way to build web apps in pure Python!",
+            # The answer is on the left.
+            text_align="left",
+        ),
+    )
 if __name__ == "__main__":
     api_key = "YOUR_OPENWEATHERMAP_API_KEY"
-    app = WeatherApp(api_key)
-    app.run()
+    app = rfx.App()
+    app.add_page(index)
+    #app.add_page(render)
