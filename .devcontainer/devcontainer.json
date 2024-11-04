@@ -1,8 +1,9 @@
 {
     "customizations": {
       "vscode": {
-        "extensions": ["github.copilot","reflex"]
+        "extensions": ["github.copilot"]
       }
-    }
+     }, 
+     "postCreateCommand": "pip3 install --user -r requirements.txt"
   }
   
